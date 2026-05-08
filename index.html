@@ -2,20 +2,44 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>API Test</title>
+  <title>API Test UI</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    button { margin: 5px; padding: 10px 20px; }
+    #result { margin-top: 20px; padding: 10px; background: #f0f0f0; }
+  </style>
 </head>
 <body>
-  <h1>API 呼び出しテスト</h1>
+  <h1>複数 API 呼び出しテスト</h1>
 
-  <button id="btn">API を呼ぶ</button>
+  <button id="btnHello">Hello API</button>
+  <button id="btnTime">Time API</button>
+  <button id="btnWeather">Weather API</button>
 
-  <p id="result"></p>
+  <div id="result">ここに結果が表示されます</div>
 
   <script>
-    document.getElementById("btn").addEventListener("click", async () => {
-      const res = await fetch("/api/hello");
+    const result = document.getElementById("result");
+
+    // Hello API
+    document.getElementById("btnHello").addEventListener("click", async () => {
+      const res = await fetch("/api/hello?name=Azure");
       const text = await res.text();
-      document.getElementById("result").textContent = text;
+      result.textContent = text;
+    });
+
+    // Time API
+    document.getElementById("btnTime").addEventListener("click", async () => {
+      const res = await fetch("/api/time");
+      const text = await res.text();
+      result.textContent = text;
+    });
+
+    // Weather API
+    document.getElementById("btnWeather").addEventListener("click", async () => {
+      const res = await fetch("/api/weather");
+      const json = await res.json();
+      result.textContent = `場所: ${json.location}, 気温: ${json.temperature}℃, 天気: ${json.condition}`;
     });
   </script>
 </body>

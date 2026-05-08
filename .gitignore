@@ -1,0 +1,8 @@
+# Node modules
+api/node_modules/
+
+# Azure Functions local settings
+api/local.settings.json
+
+# Logs
+*.log

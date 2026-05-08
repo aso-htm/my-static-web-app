@@ -62,8 +62,8 @@
       document.getElementById("name").value = "";
       document.getElementById("age").value = "";
 
-      // 一覧を更新
-      loadUsers();
+  // ★ これがないと一覧が更新されない！
+  await loadUsers();
     }
 
     // ページ読み込み時に一覧を表示

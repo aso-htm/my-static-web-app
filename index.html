@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Azure Static Web App</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>API Test</title>
 </head>
 <body>
-    <h1>Welcome to My Azure Static Web App</h1>
-    <p>This is a simple static website hosted on Azure.</p>
-    <p>変更のテストです。</p>
+  <h1>API 呼び出しテスト</h1>
+
+  <button id="btn">API を呼ぶ</button>
+
+  <p id="result"></p>
+
+  <script>
+    document.getElementById("btn").addEventListener("click", async () => {
+      const res = await fetch("/api/hello");
+      const text = await res.text();
+      document.getElementById("result").textContent = text;
+    });
+  </script>
 </body>
 </html>

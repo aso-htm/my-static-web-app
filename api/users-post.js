@@ -2,7 +2,7 @@ import { app } from '@azure/functions';
 import sql from "mssql";
 import { v4 as uuidv4 } from "uuid";
 
-app.http('users-post', {
+app.http('users', {
   methods: ['POST'],
   authLevel: 'anonymous',
   handler: async (request, context) => {

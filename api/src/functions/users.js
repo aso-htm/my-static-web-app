@@ -1,19 +1,25 @@
-const { app } = require('@azure/functions');
+import { app } from '@azure/functions';
+import sql from "mssql";
 
 app.http('users', {
   methods: ['GET'],
   authLevel: 'anonymous',
-  handler: async (req, ctx) => {
+  handler: async (request, context) => {
 
-    // ダミーデータ（本来はDBから取得）
-    const users = [
-      { id: 1, name: "Taro", age: 25 },
-      { id: 2, name: "Hanako", age: 30 },
-      { id: 3, name: "Ken", age: 28 }
-    ];
+    const config = {
+      server: process.env.DB_SERVER,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      options: { encrypt: true }
+    };
+
+    const pool = await sql.connect(config);
+    const result = await pool.request().query("SELECT * FROM Users");
 
     return {
-      jsonBody: users
+      status: 200,
+      jsonBody: result.recordset
     };
   }
 });

@@ -52,7 +52,7 @@
         return;
       }
 
-      await fetch("/api/users", {
+      await fetch("/api/users-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, age })

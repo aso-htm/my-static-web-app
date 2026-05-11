@@ -1,40 +1,34 @@
-const { app } = require('@azure/functions');
-
-let users = [
-  { id: 1, name: "Taro", age: 25 },
-  { id: 2, name: "Hanako", age: 30 },
-  { id: 3, name: "Ken", age: 28 }
-];
+import { app } from '@azure/functions';
+import sql from "mssql";
+import { v4 as uuidv4 } from "uuid";
 
 app.http('users-post', {
-  route: 'users',
   methods: ['POST'],
   authLevel: 'anonymous',
   handler: async (request, context) => {
 
-    // ★★★ Functions v4 正しい JSON 読み取り方法 ★★★
     const body = await request.json();
+    const id = uuidv4();
 
-    if (!body.name || !body.age) {
-      return {
-        status: 400,
-        body: "name と age は必須です"
-      };
-    }
-
-    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
-
-    const newUser = {
-      id: newId,
-      name: body.name,
-      age: body.age
+    const config = {
+      server: process.env.DB_SERVER,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      options: { encrypt: true }
     };
 
-    users.push(newUser);
+    const pool = await sql.connect(config);
+
+    await pool.request()
+      .input("id", id)
+      .input("name", body.name)
+      .input("age", body.age)
+      .query("INSERT INTO Users (Id, Name, Age) VALUES (@id, @name, @age)");
 
     return {
       status: 201,
-      jsonBody: newUser
+      jsonBody: { id, ...body }
     };
   }
 });

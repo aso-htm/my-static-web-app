@@ -1,4 +1,4 @@
-import { app } from '@azure/functions';
+const { app } = require('@azure/functions');
 import sql from "mssql";
 import { v4 as uuidv4 } from "uuid";
 

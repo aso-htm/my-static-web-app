@@ -1,4 +1,4 @@
-const { app } = require('@azure/functions');
+import { app } from '@azure/functions';
 import sql from "mssql";
 
 app.http('users', {

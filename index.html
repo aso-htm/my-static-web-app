@@ -21,6 +21,12 @@
     <button onclick="addUser()">追加</button>
   </div>
 
+  <h3>ファイルアップロード</h3>
+  <input type="file" id="fileInput" />
+  <button id="uploadBtn">アップロード</button>
+
+  <div id="result"></div>
+
   <script>
     // -------------------------
     // ユーザー一覧を取得して表示
@@ -65,7 +71,35 @@
   // ★ これがないと一覧が更新されない！
   await loadUsers();
     }
+    
+    // -------------------------
+    // ファイルアップロード
+    // -------------------------
+document.getElementById("uploadBtn").addEventListener("click", async () => {
+    const fileInput = document.getElementById("fileInput");
+    if (!fileInput.files.length) {
+        alert("ファイルを選択してください");
+        return;
+    }
 
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/upload-image", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await res.json();
+
+    // 画像を表示
+    document.getElementById("result").innerHTML = `
+        <p>アップロード成功！</p>
+        <img src="${data.url}" style="max-width:300px;">
+    `;
+});
     // ページ読み込み時に一覧を表示
     loadUsers();
   </script>
